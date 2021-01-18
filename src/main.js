@@ -7,6 +7,12 @@ import {getTripDaysItem} from './components/trip-days-item';
 import {getTripEventsItem} from './components/trip-events-item';
 import {getTripInfoTemplate} from './components/trip-info';
 import {getTripInfoCostTemplate} from './components/trip-info-cost';
+import {generatePoints} from './mock/point';
+
+const POINTS_COUNT = 20;
+const points = generatePoints(POINTS_COUNT);
+
+console.log(points);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
