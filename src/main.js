@@ -39,6 +39,6 @@ render(tripDays, getTripDaysItem(), `beforeend`);
 const tripEventList = tripDays.querySelector(`.trip-events__list`);
 const EVENTS_COUNT = 3;
 for (let i = 0; i < EVENTS_COUNT; i++) {
-  render(tripEventList, getTripEventsItem(), `beforeend`);
+  render(tripEventList, getTripEventsItem(points[0]), `beforeend`);
 }
 

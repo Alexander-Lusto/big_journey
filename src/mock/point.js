@@ -77,9 +77,13 @@ const shuffleArray = (array) => {
 
 const generatePoint = () => {
   return {
+    basePrice: getRandomNumber(0, 1000),
+    dateFrom: new Date(2021, 2, 1, 6, 0),
+    dateTo: new Date(2021, 2, 1, 12, 15),
+    isFavorite: Math.random() >= 0.5 ? true : false,
     type: POINT_TYPES[getRandomNumber(0, POINT_TYPES.length - 1)],
     destination: DESTINATIONS[getRandomNumber(0, DESTINATIONS.length - 1)],
-    options: shuffleArray(OPTIONS).slice(0, getRandomNumber(0, 5)),
+    offers: shuffleArray(OPTIONS).slice(0, getRandomNumber(0, 5)),
     info: {
       description: shuffleArray(DESCRIPTION).slice(0, getRandomNumber(1, 5)).join(` `),
       photos: `http://picsum.photos/248/152?r=${Math.random()}`,

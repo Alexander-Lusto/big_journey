@@ -1,37 +1,56 @@
-export const getTripEventsItem = () => {
+export const getTripEventsItem = (point) => {
+
+  const {type, destination, basePrice, offers, dateFrom, dateTo} = point;
+
+  const typeCapitalized = type[0].toUpperCase() + type.slice(1);
+  const preposition = (type === `check-in` || type === `sightseeing` || type === `restaurant`) ? `in` : `to`;
+  const duration = Math.round((dateTo - dateFrom) / 1000 / 60);
+  const hours = Math.floor(duration / 60);
+  const minutes = duration % 60;
+
+  const getOffersTemplate = (array) => {
+    return array.map((el) => {
+      return `
+        <li class="event__offer">
+          <span class="event__offer-title">${el.title}</span>
+            &plus;
+            &euro;&nbsp;<span class="event__offer-price">${el.price}</span>
+        </li>`;
+    }).join(``);
+  };
+
   return (`
     <li class="trip-events__item">
       <div class="event">
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/sightseeing.png" alt="Event type icon">
+          <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">Sightseeing in Chamonix</h3>
+        <h3 class="event__title">${typeCapitalized} ${preposition} ${destination}</h3>
 
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-19T11:20">14:20</time>
+            <time class="event__start-time" datetime="2019-03-19T11:20">
+            ${dateFrom.getHours() >= 10 ? dateFrom.getHours() : `0` + dateFrom.getHours()}
+            :
+            ${dateFrom.getMinutes() >= 10 ? dateFrom.getMinutes() : `0` + dateFrom.getMinutes()}
+            </time>
             &mdash;
-            <time class="event__end-time" datetime="2019-03-19T13:00">13:00</time>
+            <time class="event__end-time" datetime="2019-03-19T13:00">
+            ${dateTo.getHours() >= 10 ? dateTo.getHours() : `0` + dateTo.getHours()}
+            :
+            ${dateTo.getMinutes() >= 10 ? dateTo.getMinutes() : `0` + dateTo.getMinutes()}
+            </time>
           </p>
-          <p class="event__duration">1H 20M</p>
+          <p class="event__duration">${hours > 0 ? hours + `H` : ``} ${minutes}M</p>
         </div>
 
         <p class="event__price">
-          &euro;&nbsp;<span class="event__price-value">50</span>
+          &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
         </p>
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">Book tickets</span>
-            &plus;
-            &euro;&nbsp;<span class="event__offer-price">40</span>
-          </li>
-          <li class="event__offer">
-            <span class="event__offer-title">Lunch in city</span>
-            &plus;
-            &euro;&nbsp;<span class="event__offer-price">30</span>
-            </li>
+          ${getOffersTemplate(offers)}
         </ul>
 
         <button class="event__rollup-btn" type="button">

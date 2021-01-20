@@ -1,4 +1,5 @@
 export const getTripDaysItem = () => {
+
   return (`
     <li class="trip-days__item  day">
       <div class="day__info">
