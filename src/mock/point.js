@@ -1,17 +1,21 @@
-const POINT_TYPES = [
-  `taxi`,
-  `bus`,
-  `train`,
-  `ship`,
-  `transport`,
-  `drive`,
-  `flight`,
-  `check-in`,
-  `sightseeing`,
-  `restaurant`
-];
+export const POINT_TYPES = {
+  TRANSFER: [
+    `taxi`,
+    `bus`,
+    `train`,
+    `ship`,
+    `transport`,
+    `drive`,
+    `flight`,
+  ],
+  ACTIVITY: [
+    `check-in`,
+    `sightseeing`,
+    `restaurant`,
+  ],
+};
 
-const DESTINATIONS = [
+export const DESTINATIONS = [
   `Amsterdam`,
   `New York`,
   `San Francisco`,
@@ -23,27 +27,40 @@ const DESTINATIONS = [
   `Silent Hill`,
 ];
 
-const OPTIONS = [
+export const OFFERS = [
   {
     title: `Add luggage`,
     price: 30,
+    id: `luggage`,
   },
   {
     title: `Switch to comfort class`,
     price: 100,
+    id: `comfort`,
   },
   {
     title: `Add meal`,
     price: 15,
+    id: `meal`,
   },
   {
     title: `Choose seats`,
     price: 5,
+    id: `seats`,
   },
   {
     title: `Travel by train`,
     price: 40,
+    id: `train`,
   },
+];
+
+export const PHOTOS = [
+  `1.jpg`,
+  `2.jpg`,
+  `3.jpg`,
+  `4.jpg`,
+  `5.jpg`,
 ];
 
 const DESCRIPTION = [
@@ -75,18 +92,21 @@ const shuffleArray = (array) => {
   return array;
 };
 
+
+let date = Number(new Date(2021, 2, 1, 6, 0));
+
 const generatePoint = () => {
   return {
     basePrice: getRandomNumber(0, 1000),
-    dateFrom: new Date(2021, 2, 1, 6, 0),
-    dateTo: new Date(2021, 2, 1, 12, 15),
+    dateFrom: new Date(date),
+    dateTo: new Date(date + 1000 * 60 * getRandomNumber(1, 60) * getRandomNumber(1, 24)),
     isFavorite: Math.random() >= 0.5 ? true : false,
-    type: POINT_TYPES[getRandomNumber(0, POINT_TYPES.length - 1)],
+    type: Math.random() >= 0.5 ? POINT_TYPES.TRANSFER[getRandomNumber(0, POINT_TYPES.TRANSFER.length - 1)] : POINT_TYPES.ACTIVITY[getRandomNumber(0, POINT_TYPES.ACTIVITY.length - 1)],
     destination: DESTINATIONS[getRandomNumber(0, DESTINATIONS.length - 1)],
-    offers: shuffleArray(OPTIONS).slice(0, getRandomNumber(0, 5)),
+    offers: shuffleArray(OFFERS).slice(0, getRandomNumber(0, 5)),
     info: {
       description: shuffleArray(DESCRIPTION).slice(0, getRandomNumber(1, 5)).join(` `),
-      photos: `http://picsum.photos/248/152?r=${Math.random()}`,
+      photos: PHOTOS,
     },
   };
 };
@@ -94,6 +114,7 @@ const generatePoint = () => {
 const generatePoints = (number) => {
   const array = [];
   for (let i = 1; i <= number; i++) {
+    date += 1000 * 60 * getRandomNumber(1, 60) * getRandomNumber(1, 24);
     array.push(generatePoint());
   }
   return array;

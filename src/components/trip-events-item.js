@@ -1,4 +1,4 @@
-export const getTripEventsItem = (point) => {
+export const getTripEventsItemTemplate = (point) => {
 
   const {type, destination, basePrice, offers, dateFrom, dateTo} = point;
 
@@ -30,9 +30,9 @@ export const getTripEventsItem = (point) => {
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="2019-03-19T11:20">
-            ${dateFrom.getHours() >= 10 ? dateFrom.getHours() : `0` + dateFrom.getHours()}
-            :
-            ${dateFrom.getMinutes() >= 10 ? dateFrom.getMinutes() : `0` + dateFrom.getMinutes()}
+              ${dateFrom.getHours() >= 10 ? dateFrom.getHours() : `0` + dateFrom.getHours()}
+              :
+              ${dateFrom.getMinutes() >= 10 ? dateFrom.getMinutes() : `0` + dateFrom.getMinutes()}
             </time>
             &mdash;
             <time class="event__end-time" datetime="2019-03-19T13:00">

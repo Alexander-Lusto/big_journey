@@ -1,4 +1,4 @@
-export const getTripDaysItem = () => {
+export const getTripDaysItemTemplate = () => {
 
   return (`
     <li class="trip-days__item  day">
