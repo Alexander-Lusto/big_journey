@@ -12,8 +12,6 @@ import {generatePoints} from './mock/point';
 const POINTS_COUNT = 20;
 const points = generatePoints(POINTS_COUNT);
 
-console.log(points);
-
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -35,9 +33,21 @@ render(pageMainEvents, getTripDaysTemplate(), `beforeend`);
 
 const tripDays = document.querySelector(`.trip-days`);
 
-render(tripDays, getTripDaysItemTemplate(), `beforeend`);
-const tripEventList = tripDays.querySelector(`.trip-events__list`);
+const renderEventsByDays = (events) => { // Алгоритм отрисовки точек маршрута по дням:
+  let daysIndex = 0; // (создали индекс для доступа к нужному дню в коллекции)
+  render(tripDays, getTripDaysItemTemplate(events[0], daysIndex + 1), `beforeend`); // 1. Создать контейнер первого дня и заполнить датойОтъезда первого элемента
+  let tripEventsListAll = tripDays.querySelectorAll(`.trip-events__list`);
 
-for (let j = 1; j < POINTS_COUNT; j++) {
-  render(tripEventList, getTripEventsItemTemplate(points[j]), `beforeend`);
-}
+  for (let i = 1; i < events.length; i++) {
+    if (events[i].dateFrom.getDate() === events[i - 1].dateFrom.getDate()) { // 2. Проверить второй элемент "если ( элемнт два происходит в этот день)"
+      render(tripEventsListAll[daysIndex], getTripEventsItemTemplate(events[i]), `beforeend`); // 2.1 отрисовать элемент в этот контейнер
+    } else {
+      daysIndex++; // (увеличиваем индекс на 1, т.к. начался следующий день)
+      render(tripDays, getTripDaysItemTemplate(events[i], daysIndex + 1), `beforeend`); // 3. Создать контейнер второго дня и заполнить датойОтъезда второго элемента
+      tripEventsListAll = tripDays.querySelectorAll(`.trip-events__list`);
+      render(tripEventsListAll[daysIndex], getTripEventsItemTemplate(events[i]), `beforeend`); // 4. Отрисовать точку маршрута в этот контейнер
+    }
+  }
+};
+
+renderEventsByDays(points);

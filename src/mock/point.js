@@ -99,7 +99,7 @@ const generatePoint = () => {
   return {
     basePrice: getRandomNumber(0, 1000),
     dateFrom: new Date(date),
-    dateTo: new Date(date + 1000 * 60 * getRandomNumber(1, 60) * getRandomNumber(1, 24)),
+    dateTo: new Date(date += 1000 * 60 * getRandomNumber(1, 60) * getRandomNumber(1, 24)),
     isFavorite: Math.random() >= 0.5 ? true : false,
     type: Math.random() >= 0.5 ? POINT_TYPES.TRANSFER[getRandomNumber(0, POINT_TYPES.TRANSFER.length - 1)] : POINT_TYPES.ACTIVITY[getRandomNumber(0, POINT_TYPES.ACTIVITY.length - 1)],
     destination: DESTINATIONS[getRandomNumber(0, DESTINATIONS.length - 1)],
