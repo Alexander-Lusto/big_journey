@@ -1,7 +1,6 @@
 import {createElement} from '../utils';
 
 const createTripInfoCostTemplate = (points) => {
-
   const priceTotal = points.reduce((sum, current) => sum + current.basePrice, 0);
 
   return (
@@ -30,5 +29,4 @@ export default class TripEventsItem {
   removeElement() {
     this._element = null;
   }
-
 }

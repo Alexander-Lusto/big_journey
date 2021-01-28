@@ -27,7 +27,6 @@ export default class TripDaysItem {
     this._point = point;
     this._counter = counter;
     this._element = null;
-
   }
 
   getTemplate() {
