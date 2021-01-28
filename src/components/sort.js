@@ -1,13 +1,10 @@
-const SORT_TYPES = [
-  `Day`,
-  `Event`,
-  `Time`,
-  `Price`,
-  `Offers`,
-];
-const activeSortType = SORT_TYPES[2];
+import {createElement} from '../utils';
+import {SORT_TYPES} from '../const';
 
-const createSortTemplate = (sortTypes) => {
+
+const defaultSortType = SORT_TYPES[2];
+
+const createSortMarkup = (sortTypes) => {
   return sortTypes.map((type) => {
     return (`
       <div class="trip-sort__item  trip-sort__item--${type.toLowerCase()}">
@@ -17,7 +14,7 @@ const createSortTemplate = (sortTypes) => {
           type="radio"
           name="trip-sort"
           value="sort-${type.toLowerCase()}"
-          ${activeSortType === type ? `checked` : ``}
+          ${defaultSortType === type ? `checked` : ``}
           >
         <label class="trip-sort__btn" for="sort-${type.toLowerCase()}">
           ${type}
@@ -30,11 +27,31 @@ const createSortTemplate = (sortTypes) => {
   }).join(``);
 };
 
-
-export const getSortTemplate = () => {
-  return (`
-    <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-      ${createSortTemplate(SORT_TYPES)}
-    </form>
-  `);
+const createSortTemplate = () => {
+  return (
+    `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+      ${createSortMarkup(SORT_TYPES)}
+    </form>`);
 };
+
+export default class Sort {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSortTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+}

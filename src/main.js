@@ -1,51 +1,65 @@
-import {getEventEditorTemplate} from './components/event-editor';
-import {getFilterTemplate} from './components/filter';
-import {getMenuTemplate} from './components/menu';
-import {getSortTemplate} from './components/sort';
-import {getTripDaysTemplate} from './components/trip-days';
-import {getTripDaysItemTemplate} from './components/trip-days-item';
-import {getTripEventsItemTemplate} from './components/trip-events-item';
-import {getTripInfoTemplate} from './components/trip-info';
-import {getTripInfoCostTemplate} from './components/trip-info-cost';
+import EventEditorComponent from './components/event-editor';
+import FilterComponent from './components/filter';
+import MenuComponent from './components/menu';
+import SortComponent from './components/sort';
+import TripDaysComponent from './components/trip-days';
+import TripDaysItemComponent from './components/trip-days-item';
+import TripEventsItemComponent from './components/trip-events-item';
+import TripInfoComponent from './components/trip-info';
+import TripInfoCostComponent from './components/trip-info-cost';
 import {generatePoints} from './mock/point';
+import {render, RenderPosition} from './utils';
+
 
 const POINTS_COUNT = 20;
 const points = generatePoints(POINTS_COUNT);
-
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
+console.log(points);
 
 const tripMain = document.querySelector(`.trip-main`);
 const tripControls = tripMain.querySelector(`.trip-controls`);
 const pageMain = document.querySelector(`.page-main`);
 const pageMainEvents = pageMain.querySelector(`.trip-events`);
 
-render(tripMain, getTripInfoTemplate(points), `afterbegin`);
-render(tripControls, getMenuTemplate(), `afterbegin`);
-render(tripControls, getFilterTemplate(), `beforeend`);
+const tripInfoComponent = new TripInfoComponent(points);
+const menuComponent = new MenuComponent();
+const filterComponent = new FilterComponent();
+const tripInfoCostComponent = new TripInfoCostComponent(points);
+const sortComponent = new SortComponent();
+const eventEditorComponent = new EventEditorComponent(points[0]);
+const tripDaysComponent = new TripDaysComponent();
+
+render(tripMain, tripInfoComponent, RenderPosition.AFTERBEGIN);
+render(tripControls, menuComponent, RenderPosition.AFTERBEGIN);
+render(tripControls, filterComponent, RenderPosition.BEFOREEND);
 
 const tripInfo = document.querySelector(`.trip-info`);
-render(tripInfo, getTripInfoCostTemplate(points), `beforeend`);
-render(pageMainEvents, getSortTemplate(), `beforeend`);
-render(pageMainEvents, getEventEditorTemplate(points[0]), `beforeend`);
-render(pageMainEvents, getTripDaysTemplate(), `beforeend`);
+render(tripInfo, tripInfoCostComponent, RenderPosition.BEFOREEND);
+render(pageMainEvents, sortComponent, RenderPosition.BEFOREEND);
+render(pageMainEvents, eventEditorComponent, RenderPosition.BEFOREEND);
+render(pageMainEvents, tripDaysComponent, RenderPosition.BEFOREEND);
 
 const tripDays = document.querySelector(`.trip-days`);
 
 const renderEventsByDays = (events) => { // Алгоритм отрисовки точек маршрута по дням:
   let daysIndex = 0; // (создали индекс для доступа к нужному дню в коллекции)
-  render(tripDays, getTripDaysItemTemplate(events[0], daysIndex + 1), `beforeend`); // 1. Создать контейнер первого дня и заполнить датойОтъезда первого элемента
+  let tripDaysItemComponent = new TripDaysItemComponent(events[0], daysIndex + 1);
+  render(tripDays, tripDaysItemComponent, RenderPosition.BEFOREEND); // 1. Создать контейнер первого дня и заполнить датойОтъезда первого элемента
   let tripEventsListAll = tripDays.querySelectorAll(`.trip-events__list`);
 
   for (let i = 1; i < events.length; i++) {
     if (events[i].dateFrom.getDate() === events[i - 1].dateFrom.getDate()) { // 2. Проверить второй элемент "если ( элемнт два происходит в этот день)"
-      render(tripEventsListAll[daysIndex], getTripEventsItemTemplate(events[i]), `beforeend`); // 2.1 отрисовать элемент в этот контейнер
+      const tripEventsItemComponent = new TripEventsItemComponent(events[i]);
+      render(tripEventsListAll[daysIndex], tripEventsItemComponent, RenderPosition.BEFOREEND); // 2.1 отрисовать элемент в этот контейнер
     } else {
       daysIndex++; // (увеличиваем индекс на 1, т.к. начался следующий день)
-      render(tripDays, getTripDaysItemTemplate(events[i], daysIndex + 1), `beforeend`); // 3. Создать контейнер второго дня и заполнить датойОтъезда второго элемента
+
+      tripDaysItemComponent = new TripDaysItemComponent(events[0], daysIndex + 1);
+      render(tripDays, tripDaysItemComponent, RenderPosition.BEFOREEND); // 3. Создать контейнер второго дня и заполнить датойОтъезда второго элемента
+
       tripEventsListAll = tripDays.querySelectorAll(`.trip-events__list`);
-      render(tripEventsListAll[daysIndex], getTripEventsItemTemplate(events[i]), `beforeend`); // 4. Отрисовать точку маршрута в этот контейнер
+
+      const tripEventsItemComponent = new TripEventsItemComponent(events[i]);
+      render(tripEventsListAll[daysIndex], tripEventsItemComponent, RenderPosition.BEFOREEND); // 4. Отрисовать точку маршрута в этот контейнер
     }
   }
 };

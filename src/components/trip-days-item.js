@@ -1,12 +1,14 @@
 import {Month} from '../const.js';
+import {createElement} from '../utils';
 
-export const getTripDaysItemTemplate = (point, counter) => {
+
+const createTripDaysItemTemplate = (point, counter) => {
   const date = point.dateFrom.getDate();
   const month = point.dateFrom.getMonth();
   const fullYear = point.dateFrom.getFullYear();
 
-  return (`
-    <li class="trip-days__item  day">
+  return (
+    `<li class="trip-days__item  day">
       <div class="day__info">
         <span class="day__counter">${counter}</span>
         <time
@@ -17,6 +19,30 @@ export const getTripDaysItemTemplate = (point, counter) => {
 
       <ul class="trip-events__list">
       </ul>
-    </li>
-  `);
+    </li>`);
 };
+
+export default class TripDaysItem {
+  constructor(point, counter) {
+    this._point = point;
+    this._counter = counter;
+    this._element = null;
+
+  }
+
+  getTemplate() {
+    return createTripDaysItemTemplate(this._point, this._counter);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+}
