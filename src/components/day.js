@@ -22,7 +22,7 @@ const createTripDaysItemTemplate = (point, counter) => {
     </li>`);
 };
 
-export default class TripDaysItem {
+export default class Day {
   constructor(point, counter) {
     this._point = point;
     this._counter = counter;
