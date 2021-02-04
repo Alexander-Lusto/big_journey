@@ -2,6 +2,7 @@ import {POINT_TYPES} from '../mock/point';
 import {DESTINATIONS} from '../mock/point';
 import {OFFERS} from '../mock/point';
 import {PHOTOS} from '../mock/point';
+import {createElement} from '../utils';
 
 const DEFAULT_POINT_TYPE = POINT_TYPES.TRANSFER[1];
 const DEFAULT_DATE = `18/03/19 00:00`;
@@ -53,7 +54,7 @@ const getCapitalizedString = (string) => {
   return string[0].toUpperCase() + string.slice(1);
 };
 
-export const getEventEditorTemplate = (point) => {
+const createEventEditorTemplate = (point) => {
 
   const {type, destination, offers, isFavourite, dateTo, dateFrom, basePrice} = point ? point : ``;
   const {description, photos} = point ? point.info : ``;
@@ -65,8 +66,8 @@ export const getEventEditorTemplate = (point) => {
     });
   }
 
-  return (`
-    <form class="trip-events__item  event  event--edit" action="#" method="post">
+  return (
+    `<form class="trip-events__item  event  event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -164,6 +165,28 @@ export const getEventEditorTemplate = (point) => {
           </div>
         </section>
       </section>
-    </form>
-  `);
+    </form>`);
 };
+
+export default class EventEditor {
+  constructor(events) {
+    this._events = events;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventEditorTemplate(this._events);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+}

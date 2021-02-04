@@ -1,11 +1,10 @@
-const FILTER_NAMES = [
-  `Everything`,
-  `Future`,
-  `Past`,
-];
+import {FILTER_NAMES} from '../const';
+import {createElement} from '../utils';
+
+
 const activeFilter = FILTER_NAMES[0];
 
-const createFilterTemplate = (filters) => {
+const createFilterMarkup = (filters) => {
   return filters.map((filter) => {
     return `
       <div class="trip-filters__filter">
@@ -19,11 +18,33 @@ const createFilterTemplate = (filters) => {
   }).join(``);
 };
 
-export const getFilterTemplate = () => {
-  return (`
-    <form class="trip-filters" action="#" method="get">
-      ${createFilterTemplate(FILTER_NAMES)}
-      <button class="visually-hidden" type="submit">Accept filter</button>
-    </form>
-  `);
+const createFilterTemplate = () => {
+  return (
+    `<form class="trip-filters" action="#" method="get">
+        ${createFilterMarkup(FILTER_NAMES)}
+        <button class="visually-hidden" type="submit">Accept filter</button>
+      </form>`
+  );
 };
+
+export default class Filter {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilterTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+}

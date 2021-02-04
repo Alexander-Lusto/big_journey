@@ -1,4 +1,6 @@
-export const getTripEventsItemTemplate = (point) => {
+import {createElement} from '../utils';
+
+const createTripEventsItemTemplate = (point) => {
 
   const {type, destination, basePrice, offers, dateFrom, dateTo} = point;
 
@@ -10,17 +12,17 @@ export const getTripEventsItemTemplate = (point) => {
 
   const getOffersTemplate = (array) => {
     return array.map((el) => {
-      return `
-        <li class="event__offer">
+      return (
+        `<li class="event__offer">
           <span class="event__offer-title">${el.title}</span>
             &plus;
             &euro;&nbsp;<span class="event__offer-price">${el.price}</span>
-        </li>`;
+        </li>`);
     }).join(``);
   };
 
-  return (`
-    <li class="trip-events__item">
+  return (
+    `<li class="trip-events__item">
       <div class="event">
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
@@ -57,6 +59,28 @@ export const getTripEventsItemTemplate = (point) => {
           <span class="visually-hidden">Open event</span>
         </button>
       </div>
-    </li>
-  `);
+    </li>`);
 };
+
+export default class Event {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripEventsItemTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+}
