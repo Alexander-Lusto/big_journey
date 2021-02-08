@@ -1,8 +1,9 @@
+import AbstractComponent from './abstract-component';
 import {POINT_TYPES} from '../mock/point';
 import {DESTINATIONS} from '../mock/point';
 import {OFFERS} from '../mock/point';
 import {PHOTOS} from '../mock/point';
-import {createElement} from '../utils';
+
 
 const DEFAULT_POINT_TYPE = POINT_TYPES.TRANSFER[1];
 const DEFAULT_DATE = `18/03/19 00:00`;
@@ -168,25 +169,13 @@ const createEventEditorTemplate = (point) => {
     </form>`);
 };
 
-export default class EventEditor {
+export default class EventEditor extends AbstractComponent {
   constructor(events) {
+    super();
     this._events = events;
-    this._element = null;
   }
 
   getTemplate() {
     return createEventEditorTemplate(this._events);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
 }

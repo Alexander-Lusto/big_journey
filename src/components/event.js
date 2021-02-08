@@ -1,4 +1,4 @@
-import {createElement} from '../utils';
+import AbstractComponent from './abstract-component';
 
 const createTripEventsItemTemplate = (point) => {
 
@@ -62,25 +62,13 @@ const createTripEventsItemTemplate = (point) => {
     </li>`);
 };
 
-export default class Event {
+export default class Event extends AbstractComponent {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
   }
 
   getTemplate() {
     return createTripEventsItemTemplate(this._point);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
 }

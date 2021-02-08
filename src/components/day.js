@@ -1,5 +1,5 @@
+import AbstractComponent from './abstract-component';
 import {Month} from '../const.js';
-import {createElement} from '../utils';
 
 
 const createTripDaysItemTemplate = (point, counter) => {
@@ -22,26 +22,14 @@ const createTripDaysItemTemplate = (point, counter) => {
     </li>`);
 };
 
-export default class Day {
+export default class Day extends AbstractComponent {
   constructor(point, counter) {
+    super();
     this._point = point;
     this._counter = counter;
-    this._element = null;
   }
 
   getTemplate() {
     return createTripDaysItemTemplate(this._point, this._counter);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
 }

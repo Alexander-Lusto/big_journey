@@ -32,7 +32,7 @@ const filterComponent = new FilterComponent();
 const sortComponent = new SortComponent();
 const daysComponent = new DaysComponent();
 const noPointsComponent = new NoPointsComponents();
-const eventEditorComponent = new EventEditorComponent(points[0]);
+// const eventEditorComponent = new EventEditorComponent(points[0]);
 
 render(tripControls, menuComponent, RenderPosition.AFTERBEGIN);
 render(tripControls, filterComponent, RenderPosition.BEFOREEND);
