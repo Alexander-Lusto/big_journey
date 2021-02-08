@@ -178,4 +178,8 @@ export default class EventEditor extends AbstractComponent {
   getTemplate() {
     return createEventEditorTemplate(this._events);
   }
+
+  setSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, handler);
+  }
 }

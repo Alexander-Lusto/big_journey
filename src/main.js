@@ -10,7 +10,7 @@ import TripInfoMainComponent from './components/trip-info-main';
 import TripInfoCostComponent from './components/trip-info-cost';
 import NoPointsComponents from './components/no-points';
 import {generatePoints} from './mock/point';
-import {render, RenderPosition} from './utils';
+import {render, RenderPosition} from './utils/render';
 
 
 const POINTS_COUNT = 10;
@@ -42,10 +42,8 @@ render(tripInfo, tripInfoCostComponent, RenderPosition.BEFOREEND);
 
 // EVENT (incapsulated logic)
 const renderEvent = (container, event) => {
-  const tripEventsItemComponent = new EventComponent(event);
+  const tripEventItemComponent = new EventComponent(event);
   const tripEventEditorComponent = new EventEditorComponent(event);
-  const tripEventEditButton = tripEventsItemComponent.getElement().querySelector(`.event__rollup-btn`);
-  const tripEventSaveButton = tripEventEditorComponent.getElement().querySelector(`.event__save-btn`);
 
   const onEscKeyDown = (evt) => {
     const isEscKey = evt.key === `Escape` || evt.key === `ESC`;
@@ -56,22 +54,26 @@ const renderEvent = (container, event) => {
   };
 
   const replaceEventToEdit = () => {
-    container.replaceChild(tripEventEditorComponent.getElement(), tripEventsItemComponent.getElement());
-    document.addEventListener(`keydown`, onEscKeyDown);
+    container.replaceChild(tripEventEditorComponent.getElement(), tripEventItemComponent.getElement());
   };
 
   const replaceEditToEvent = () => {
-    container.replaceChild(tripEventsItemComponent.getElement(), tripEventEditorComponent.getElement());
+    container.replaceChild(tripEventItemComponent.getElement(), tripEventEditorComponent.getElement());
     document.removeEventListener(`keydown`, onEscKeyDown);
   };
 
-  tripEventEditButton.addEventListener(`click`, replaceEventToEdit);
-  tripEventSaveButton.addEventListener(`click`, (evt) => {
-    evt.preventDefault();
-    replaceEditToEvent();
+  tripEventItemComponent.setEditButtonClickHandler(() => {
+    replaceEventToEdit();
+    document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  render(container, tripEventsItemComponent, RenderPosition.BEFOREEND);
+  tripEventEditorComponent.setSubmitHandler((evt) => {
+    evt.preventDefault();
+    replaceEditToEvent();
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
+
+  render(container, tripEventItemComponent, RenderPosition.BEFOREEND);
 };
 
 // TRIP (incapsulated logic)
@@ -112,5 +114,4 @@ const renderTrip = () => {
   };
   renderEventsByDays(points);
 };
-
 renderTrip();
