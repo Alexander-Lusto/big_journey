@@ -1,5 +1,5 @@
+import AbstractComponent from './abstract-component';
 import {Month} from '../const.js';
-import {createElement} from '../utils';
 
 const createTripInfoMainTemplate = (points) => {
   const rout = points.map((el) => el.destination).join(` &mdash; `);
@@ -19,24 +19,13 @@ const createTripInfoMainTemplate = (points) => {
     </div>`);
 };
 
-export default class TripInfo {
+export default class TripInfo extends AbstractComponent {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
 
   getTemplate() {
     return createTripInfoMainTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

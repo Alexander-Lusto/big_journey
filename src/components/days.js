@@ -1,4 +1,4 @@
-import {createElement} from '../utils';
+import AbstractComponent from './abstract-component';
 
 const createTripDaysTemplate = () => {
   return (
@@ -6,24 +6,8 @@ const createTripDaysTemplate = () => {
     </ul>`);
 };
 
-export default class Days {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Days extends AbstractComponent {
   getTemplate() {
     return createTripDaysTemplate();
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
 }

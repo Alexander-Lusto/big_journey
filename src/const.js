@@ -19,10 +19,12 @@ export const FILTER_NAMES = [
   `Past`,
 ];
 
-export const SORT_TYPES = [
-  `Day`,
-  `Event`,
-  `Time`,
-  `Price`,
-  `Offers`,
-];
+export const SortType = {
+  DAY: `Day`,
+  EVENT: `Event`,
+  TIME: `Time`,
+  PRICE: `Price`,
+  OFFERS: `Offers`,
+};
+
+
