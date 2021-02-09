@@ -7,6 +7,7 @@ import {render, RenderPosition} from './utils/render';
 // data
 const POINTS_COUNT = 10;
 const points = generatePoints(POINTS_COUNT);
+console.log(points);
 
 // containers
 const tripMain = document.querySelector(`.trip-main`);
@@ -21,4 +22,5 @@ const TripControllerComponent = new TripController(tripMain, tripEvents);
 // render
 render(tripControls, menuComponent, RenderPosition.AFTERBEGIN);
 render(tripControls, filterComponent, RenderPosition.BEFOREEND);
-TripControllerComponent.render(points);
+TripControllerComponent.renderTripInfo(points);
+TripControllerComponent.renderTrip(points);

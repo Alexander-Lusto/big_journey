@@ -93,7 +93,7 @@ const shuffleArray = (array) => {
 };
 
 
-let date = Number(new Date(2021, 2, 1, 6, 0));
+let date = Number(new Date(2021, 2, 6, 6, 0));
 
 const generatePoint = () => {
   return {

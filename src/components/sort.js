@@ -1,7 +1,9 @@
 import AbstractComponent from './abstract-component';
-import {SORT_TYPES} from '../const';
+import {SortType} from '../const';
 
-const defaultSortType = SORT_TYPES[2];
+// const sortTypes = SortType.keys();
+const SORT_TYPES = Object.values(SortType);
+const SORT_TYPE_DEFAULT = SortType.DAY;
 
 const createSortMarkup = (sortTypes) => {
   return sortTypes.map((type) => {
@@ -13,7 +15,8 @@ const createSortMarkup = (sortTypes) => {
           type="radio"
           name="trip-sort"
           value="sort-${type.toLowerCase()}"
-          ${defaultSortType === type ? `checked` : ``}
+          data-sort-type="${type}"
+          ${SORT_TYPE_DEFAULT === type ? `checked` : ``}
           >
         <label class="trip-sort__btn" for="sort-${type.toLowerCase()}">
           ${type}
@@ -34,7 +37,28 @@ const createSortTemplate = () => {
 };
 
 export default class Sort extends AbstractComponent {
+  constructor() {
+    super();
+    this._currentSortType = SORT_TYPE_DEFAULT;
+  }
+
   getTemplate() {
     return createSortTemplate();
+  }
+
+  getSortType() {
+    return this._currentSortType;
+  }
+
+  setSortTypeChangeHandler(handler) {
+    this.getElement().addEventListener(`change`, (evt) => {
+      const sortType = evt.target.dataset.sortType;
+
+      if (this._currentSortType === sortType) {
+        return;
+      }
+      this._currentSortType = sortType;
+      handler(this._currentSortType);
+    });
   }
 }
