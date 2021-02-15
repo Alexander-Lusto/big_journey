@@ -57,7 +57,7 @@ const getCapitalizedString = (string) => {
 
 const createEventEditorTemplate = (point) => {
 
-  const {type, destination, offers, isFavourite, dateTo, dateFrom, basePrice} = point ? point : ``;
+  const {type, destination, offers, isFavorite, dateTo, dateFrom, basePrice} = point ? point : ``;
   const {description, photos} = point ? point.info : ``;
 
   let typePreposition = TypePreposition.TO;
@@ -132,7 +132,7 @@ const createEventEditorTemplate = (point) => {
         <button class="event__reset-btn" type="reset">Cancel</button>
       ${point ? `
         <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite"
-         ${isFavourite ? `checked` : ``}
+         ${isFavorite ? `checked` : ``}
         >
         <label class="event__favorite-btn" for="event-favorite-1">
           <span class="visually-hidden">Add to favorite</span>
@@ -181,5 +181,9 @@ export default class EventEditor extends AbstractComponent {
 
   setSubmitHandler(handler) {
     this.getElement().addEventListener(`submit`, handler);
+  }
+
+  setFavoriteButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, handler);
   }
 }
