@@ -27,34 +27,6 @@ export const DESTINATIONS = [
   `Silent Hill`,
 ];
 
-export const OFFERS = [
-  {
-    title: `Add luggage`,
-    price: 30,
-    id: `luggage`,
-  },
-  {
-    title: `Switch to comfort class`,
-    price: 100,
-    id: `comfort`,
-  },
-  {
-    title: `Add meal`,
-    price: 15,
-    id: `meal`,
-  },
-  {
-    title: `Choose seats`,
-    price: 5,
-    id: `seats`,
-  },
-  {
-    title: `Travel by train`,
-    price: 40,
-    id: `train`,
-  },
-];
-
 export const PHOTOS = [
   `1.jpg`,
   `2.jpg`,
@@ -63,7 +35,7 @@ export const PHOTOS = [
   `5.jpg`,
 ];
 
-const DESCRIPTION = [
+const DESCRIPTIONS = [
   `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
   `Cras aliquet varius magna, non porta ligula feugiat eget.`,
   `Fusce tristique felis at fermentum pharetra.`,
@@ -92,6 +64,152 @@ const shuffleArray = (array) => {
   return array;
 };
 
+const Description = {
+  "Amsterdam": `Amsterdam ` + shuffleArray(DESCRIPTIONS).slice(0, getRandomNumber(1, 5)).join(` `),
+  "New York": `New York ` + shuffleArray(DESCRIPTIONS).slice(0, getRandomNumber(1, 5)).join(` `),
+  "San Francisco": `San Francisco ` + shuffleArray(DESCRIPTIONS).slice(0, getRandomNumber(1, 5)).join(` `),
+  "Brooklyn": `Brooklyn ` + shuffleArray(DESCRIPTIONS).slice(0, getRandomNumber(1, 5)).join(` `),
+  "Paris": `Paris ` + shuffleArray(DESCRIPTIONS).slice(0, getRandomNumber(1, 5)).join(` `),
+  "Pekin": `Pekin ` + shuffleArray(DESCRIPTIONS).slice(0, getRandomNumber(1, 5)).join(` `),
+  "Ireland": `Ireland ` + shuffleArray(DESCRIPTIONS).slice(0, getRandomNumber(1, 5)).join(` `),
+  "Los Angeles": `Los Angeles ` + shuffleArray(DESCRIPTIONS).slice(0, getRandomNumber(1, 5)).join(` `),
+  "Silent Hill": `Silent Hill ` + shuffleArray(DESCRIPTIONS).slice(0, getRandomNumber(1, 5)).join(` `),
+};
+
+export const OFFERS = [
+  {
+    title: `Add luggage`,
+    price: 30,
+    id: `luggage`,
+  },
+  {
+    title: `Switch to comfort class`,
+    price: 100,
+    id: `comfort`,
+  },
+  {
+    title: `Add meal`,
+    price: 15,
+    id: `meal`,
+  },
+  {
+    title: `Choose seats`,
+    price: 5,
+    id: `seats`,
+  },
+  {
+    title: `Travel by train`,
+    price: 40,
+    id: `train`,
+  },
+];
+
+export const offers = [
+  {
+    "type": `taxi`,
+    "offers": [
+      {
+        "title": `Upgrade to a business class`,
+        "price": 120
+      },
+      {
+        "title": `Choose the radio station`,
+        "price": 60
+      }]
+  },
+  {
+    "type": `bus`,
+    "offers": [
+      {
+        "title": `Choose seats`,
+        "price": 80
+      }]
+  },
+  {
+    "type": `flight`,
+    "offers": [
+      {
+        "title": `Add luggage`,
+        "price": 120
+      },
+      {
+        "title": `Switch to comfort class`,
+        "price": 150
+      },
+      {
+        "title": `Choose seats`,
+        "price": 80
+      }]
+  },
+  {
+    "type": `train`,
+    "offers": [
+      {
+        "title": `Travel by train`,
+        "price": 120
+      }]
+  },
+  {
+    "type": `ship`,
+    "offers": [
+      {
+        "title": `Add meal`,
+        "price": 30
+      }]
+  },
+  {
+    "type": `transport`,
+    "offers": [
+      {
+        "title": `Choose seats`,
+        "price": 80
+      },
+      {
+        "title": `Choose the radio station`,
+        "price": 60
+      }
+    ]
+  },
+  {
+    "type": `drive`,
+    "offers": [
+      {
+        "title": `Choose seats`,
+        "price": 80
+      },
+      {
+        "title": `Choose the radio station`,
+        "price": 10
+      }
+    ]
+  },
+  {
+    "type": `check-in`,
+    "offers": [
+      {
+        "title": `Add meal`,
+        "price": 80
+      },
+      {
+        "title": `Upgrade to a business apartment`,
+        "price": 120
+      },
+    ]
+  },
+  {
+    "type": `sightseeing`,
+    "offers": []
+  },
+  {
+    "type": `restaurant`,
+    "offers": [
+      {
+        "title": `Add meal`,
+        "price": 80
+      }
+    ]
+  }
+];
 
 let date = Number(new Date(2021, 2, 6, 6, 0));
 
@@ -105,7 +223,7 @@ const generatePoint = () => {
     destination: DESTINATIONS[getRandomNumber(0, DESTINATIONS.length - 1)],
     offers: shuffleArray(OFFERS).slice(0, getRandomNumber(0, 5)),
     info: {
-      description: shuffleArray(DESCRIPTION).slice(0, getRandomNumber(1, 5)).join(` `),
+      description: shuffleArray(DESCRIPTIONS).slice(0, getRandomNumber(1, 5)).join(` `),
       photos: PHOTOS,
     },
   };
@@ -120,4 +238,4 @@ const generatePoints = (number) => {
   return array;
 };
 
-export {generatePoints};
+export {generatePoints, Description};

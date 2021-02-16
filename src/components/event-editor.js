@@ -1,4 +1,4 @@
-import AbstractComponent from './abstract-component';
+import AbstractSmartComponent from './abstract-smart-component';
 import {POINT_TYPES} from '../mock/point';
 import {DESTINATIONS} from '../mock/point';
 import {OFFERS} from '../mock/point';
@@ -31,11 +31,11 @@ const createDestinationListMarkup = (options) => {
 };
 
 const createEventOffersMarkup = (offers) => {
-  return offers.map((offer) => {
+  return offers.map((offer, index) => {
     return `
       <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.id}-1" type="checkbox" name="event-offer-${offer.id}">
-        <label class="event__offer-label" for="event-offer-${offer.id}-1">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${index}" type="checkbox" name="event-offer-${index}">
+        <label class="event__offer-label" for="event-offer-${index}">
           <span class="event__offer-title">${offer.title}</span>
           &plus;
           &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
@@ -63,7 +63,10 @@ const createEventEditorTemplate = (point) => {
   let typePreposition = TypePreposition.TO;
   if (point) {
     POINT_TYPES.ACTIVITY.forEach((el) => {
-      typePreposition = (type === el) ? TypePreposition.IN : TypePreposition.TO;
+      if (type === el) {
+        typePreposition = TypePreposition.IN;
+        return;
+      }
     });
   }
 
@@ -169,10 +172,15 @@ const createEventEditorTemplate = (point) => {
     </form>`);
 };
 
-export default class EventEditor extends AbstractComponent {
+export default class EventEditor extends AbstractSmartComponent {
   constructor(events) {
     super();
     this._events = events;
+
+    this._submitHandler = null;
+    this._favoriteButtonClickHandler = null;
+    this._typeHandler = null;
+    this._destinationHandler = null;
   }
 
   getTemplate() {
@@ -181,9 +189,31 @@ export default class EventEditor extends AbstractComponent {
 
   setSubmitHandler(handler) {
     this.getElement().addEventListener(`submit`, handler);
+    this._submitHandler = handler;
   }
 
   setFavoriteButtonClickHandler(handler) {
     this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, handler);
+    this._favoriteButtonClickHandler = handler;
+  }
+
+  setTypeHandler(handler) {
+    const options = this.getElement().querySelectorAll(`.event__type-list input`);
+    options.forEach((type) => {
+      type.addEventListener(`change`, handler);
+    });
+    this._typeHandler = handler;
+  }
+
+  setDestenationHandler(handler) {
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`change`, handler);
+    this._destinationHandler = handler;
+  }
+
+  recoveryListeners() {
+    this.setSubmitHandler(this._submitHandler);
+    this.setFavoriteButtonClickHandler(this._favoriteButtonClickHandler);
+    this.setTypeHandler(this._typeHandler);
+    this.setDestenationHandler(this._destinationHandler);
   }
 }

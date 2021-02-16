@@ -1,6 +1,13 @@
 import EventComponent from '../components/event';
 import EventEditorComponent from '../components/event-editor';
 import {render, RenderPosition, replace} from '../utils/render';
+import {Description, offers} from '../mock/point';
+
+const getOffersByType = (type, array) => {
+  let result = array.find((el) => type === el[`type`]);
+  console.log(result);
+  return result.offers;
+};
 
 export default class PointController {
   constructor(container, onDataChange) {
@@ -35,6 +42,25 @@ export default class PointController {
 
     this.tripEventEditorComponent.setFavoriteButtonClickHandler(() => {
       const changedPoint = Object.assign({}, point, {isFavorite: !point.isFavorite});
+      this._onDataChange(this, point, changedPoint);
+    });
+
+    this.tripEventEditorComponent.setTypeHandler((evt) => {
+      const changedPoint = Object.assign({}, point, {
+        destination: ``,
+        type: evt.target.value,
+        offers: getOffersByType(evt.target.value, offers),
+      });
+      this._onDataChange(this, point, changedPoint);
+    });
+
+    this.tripEventEditorComponent.setDestenationHandler((evt) => {
+      const changedPoint = Object.assign({}, point, {
+        destination: evt.target.value,
+        info: {
+          description: Description[evt.target.value],
+        }
+      });
       this._onDataChange(this, point, changedPoint);
     });
 
