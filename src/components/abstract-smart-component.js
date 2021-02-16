@@ -7,7 +7,6 @@ export default class AbstractSmartComponent extends AbstractComponent {
   }
 
   rerender() {
-    console.log(`hello chat`);
     const oldElement = this.getElement();
     const parent = oldElement.parentElement;
 

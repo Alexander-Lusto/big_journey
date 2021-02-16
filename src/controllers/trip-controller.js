@@ -10,8 +10,8 @@ import {SortType} from '../const';
 import PointController from './point-controller';
 
 // EVENT (incapsulated logic)
-const renderEvent = (container, point, onDataChange) => {
-  const pointController = new PointController(container, onDataChange);
+const renderEvent = (container, point, onDataChange, onViewChange) => {
+  const pointController = new PointController(container, onDataChange, onViewChange);
   pointController.render(point);
   return pointController;
 };
@@ -53,7 +53,9 @@ export default class TripController {
     this._tripInfoComponent = new TripInfoComponent();
 
     this._points = [];
+    this._pointControlers = [];
     this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
   }
 
   renderTripInfo(points) {
@@ -107,11 +109,11 @@ export default class TripController {
     render(container, tripDaysItemComponent, RenderPosition.BEFOREEND); // 1. Создать контейнер первого дня и заполнить датойОтъезда первого элемента
 
     let tripEventsListAll = container.querySelectorAll(`.trip-events__list`);
-    renderEvent(tripEventsListAll[daysIndex], events[0], this._onDataChange);
+    this._pointControlers.push(renderEvent(tripEventsListAll[daysIndex], events[0], this._onDataChange, this._onViewChange));
 
     for (let i = 1; i < events.length; i++) {
       if (events[i].dateFrom.getDate() === events[i - 1].dateFrom.getDate()) { // 2. Проверить второй элемент "если ( элемнт два происходит в этот день)"
-        renderEvent(tripEventsListAll[daysIndex], events[i], this._onDataChange); // 2.1 отрисовать элемент в этот контейнер
+        this._pointControlers.push(renderEvent(tripEventsListAll[daysIndex], events[i], this._onDataChange, this._onViewChange)); // 2.1 отрисовать элемент в этот контейнер
       } else {
         daysIndex++; // (увеличиваем индекс на 1, т.к. начался следующий день)
 
@@ -119,18 +121,18 @@ export default class TripController {
         render(container, tripDaysItemComponent, RenderPosition.BEFOREEND); // 3. Создать контейнер второго дня и заполнить датойОтъезда второго элемента
 
         tripEventsListAll = container.querySelectorAll(`.trip-events__list`);
-        renderEvent(tripEventsListAll[daysIndex], events[i], this._onDataChange); // 4. Отрисовать точку маршрута в этот контейнер
+        this._pointControlers.push(renderEvent(tripEventsListAll[daysIndex], events[i], this._onDataChange, this._onViewChange)); // 4. Отрисовать точку маршрута в этот контейнер
       }
     }
   }
 
-  renderEventsWithoutDays(container, events) { // Алгоритм отрисовки точек маршрута
+  renderEventsWithoutDays(container, events) { // Алгоритм отрисовки точек маршрута без разделения по дням:
     const tripDaysItemComponent = new DayComponent();
     const tripEventsList = tripDaysItemComponent.getElement().querySelector(`.trip-events__list`);
     render(container, tripDaysItemComponent, RenderPosition.BEFOREEND);
 
     events.forEach((event) => {
-      renderEvent(tripEventsList, event, this._onDataChange);
+      this._pointControlers.push(renderEvent(tripEventsList, event, this._onDataChange, this._onViewChange));
     });
   }
 
@@ -144,6 +146,9 @@ export default class TripController {
     this._points = [].concat(this._points.slice(0, index), newData, this._points.slice(index + 1));
 
     pointController.render(this._points[index]);
-    console.log(this._points[index]);
+  }
+
+  _onViewChange() {
+    this._pointControlers.forEach((point) => point.setDefaultView());
   }
 }

@@ -9,10 +9,16 @@ const getOffersByType = (type, array) => {
   return result.offers;
 };
 
+const Mode = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+}
+
 export default class PointController {
-  constructor(container, onDataChange) {
+  constructor(container, onDataChange, onViewChange) {
     this._container = container;
     this._onDataChange = onDataChange;
+    this._onViewChange = onViewChange;
 
     this.tripEventItemComponent = null;
     this.tripEventEditorComponent = null;
@@ -20,6 +26,14 @@ export default class PointController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._replaceEventToEdit = this._replaceEventToEdit.bind(this);
     this._replaceEditToEvent = this._replaceEditToEvent.bind(this);
+
+    this._mode = Mode.DEFAULT;
+  }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceEditToEvent();
+    }
   }
 
   render(point) {
@@ -73,12 +87,15 @@ export default class PointController {
   }
 
   _replaceEventToEdit() {
+    this._onViewChange();
     this._container.replaceChild(this.tripEventEditorComponent.getElement(), this.tripEventItemComponent.getElement());
+    this._mode = Mode.EDIT;
   }
 
   _replaceEditToEvent() {
     this._container.replaceChild(this.tripEventItemComponent.getElement(), this.tripEventEditorComponent.getElement());
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._mode = Mode.DEFAULT;
   }
 
   _onEscKeyDown(evt) {
